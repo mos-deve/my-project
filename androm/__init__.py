@@ -16,11 +16,14 @@ from androm.scenarios import Scenario, ScenarioLibrary
 from androm.talker import Talker
 from androm.recursive import Recursive, Improvement
 from androm.memnet import MemNet, MemoryBank, SmartEncoder
+from androm.langmodel import SmallLM, Vocab
+from androm.andromllm import AndromLLM
 
 __version__ = "0.4.0"
 __all__ = [
     "Unit", "UnitType", "Network", "RuleEngine", "CodeGenerator", 
     "SelfOptimizer", "Brain", "Model", "Learner", "Evolver", 
     "CodeOrganism", "Scenario", "ScenarioLibrary", "Talker",
-    "Recursive", "Improvement", "MemNet", "MemoryBank", "SmartEncoder"
+    "Recursive", "Improvement", "MemNet", "MemoryBank", "SmartEncoder",
+    "SmallLM", "Vocab", "AndromLLM"
 ]
