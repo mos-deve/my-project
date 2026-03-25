@@ -1,0 +1,8 @@
+[project]
+name = "androm"
+version = "0.1.0"
+description = "Adaptive Network of Deterministic Rule-based Operations and Mathematics"
+requires-python = ">=3.10"
+
+[project.scripts]
+androm = "androm.cli:main"
