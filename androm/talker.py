@@ -1,95 +1,154 @@
 """
-Talker - Conversational text generator using MemNet.
-Uses memory-augmented neural network for coherent text generation.
+Talker - Conversational text generator using advanced MemNet.
+Smart, relevant, context-aware responses.
 """
 
 from __future__ import annotations
 import random
-from dataclasses import dataclass, field
 from androm.memnet import MemNet
 
 
 class Talker:
     """
-    Conversational text generator using MemNet architecture.
-    
-    Uses memory-augmented neural network instead of:
-    - Transformers (no quadratic attention)
-    - N-grams (better context understanding)
-    - RNNs (can access any memory)
+    Smart conversational AI using MemNet.
     
     Features:
-    - Learns from conversations
-    - Retrieves relevant memories for context
-    - Generates coherent responses
-    - Memory grows with use
+    - Semantic understanding of questions
+    - Topic-aware response selection
+    - Multi-signal relevance scoring
+    - Context tracking
+    - Continuous learning
     """
     
     def __init__(self, memory_size: int = 10000):
         self.model = MemNet(memory_size=memory_size)
         self.conversation_history: list[dict] = []
-        self._train_default()
+        self._train_comprehensive()
     
-    def _train_default(self):
-        """Train with default knowledge - responses only."""
-        # Store question-answer pairs
-        qa_pairs = [
-            ("Hello!", "Hello! How can I help you today?"),
-            ("Hi", "Hi there! What would you like to know?"),
-            ("Hey", "Hey! What's on your mind?"),
+    def _train_comprehensive(self):
+        """Train with comprehensive knowledge base."""
+        # Question-answer pairs organized by topic
+        knowledge = {
+            # Greetings
+            "greeting": [
+                "Hello! How can I help you today?",
+                "Hi there! I'm ANDROM, ready to assist you.",
+                "Greetings! What would you like to know?",
+                "Hey! Great to meet you. What's on your mind?",
+                "Goodbye! Have a great day!",
+                "See you later! Take care!",
+                "Bye! Feel free to come back anytime.",
+            ],
             
-            ("What is programming?", "Programming is about solving problems with code. Code is written in languages like Python."),
-            ("How do functions work?", "Functions take inputs and return outputs. They organize code into reusable pieces."),
-            ("What is debugging?", "Debugging is finding and fixing errors in code. Testing ensures code works correctly."),
-            ("What makes good code?", "Good code is readable, maintainable, and efficient. Comments explain what code does."),
+            # Programming knowledge
+            "programming": [
+                "Programming is the process of creating instructions for computers. Code is written in languages like Python, JavaScript, and Rust.",
+                "A function is a reusable block of code that takes inputs and returns outputs. Functions help organize and modularize code.",
+                "Debugging is the process of finding and fixing errors in code. Good programmers use debuggers, print statements, and logical reasoning.",
+                "An algorithm is a step-by-step procedure for solving a problem. Good algorithms are efficient, correct, and easy to understand.",
+                "Variables store data values. They have names and types. Good variable names describe what the variable contains.",
+                "Object-oriented programming organizes code into classes and objects. Classes define behavior, objects are instances.",
+                "Data structures organize and store data efficiently. Common structures include arrays, lists, trees, and hash tables.",
+                "Recursion is when a function calls itself. It's useful for problems that can be broken into smaller similar subproblems.",
+            ],
             
-            ("What is AI?", "Artificial intelligence simulates human intelligence in machines. I am an example of AI."),
-            ("What is machine learning?", "Machine learning lets computers learn from data without being explicitly programmed."),
-            ("What are neural networks?", "Neural networks are inspired by the human brain. They have layers of connected nodes."),
-            ("How does training work?", "Training is the process of teaching a model using data. Inference is using the model."),
+            # AI knowledge
+            "ai": [
+                "Artificial intelligence is the simulation of human intelligence by machines. It includes learning, reasoning, and problem-solving.",
+                "Machine learning is a subset of AI where computers learn from data without being explicitly programmed for every scenario.",
+                "Neural networks are computing systems inspired by biological brains. They have layers of interconnected nodes that process information.",
+                "Deep learning uses neural networks with many layers to learn complex patterns. It's used for image recognition, language processing, and more.",
+                "Training is the process of teaching a model using data. The model adjusts its parameters to minimize errors on the training data.",
+                "Natural language processing (NLP) helps computers understand and generate human language. It powers chatbots, translation, and analysis.",
+                "Reinforcement learning trains agents to make decisions by rewarding good actions and penalizing bad ones.",
+                "Transfer learning reuses a model trained on one task for a different but related task, saving time and data.",
+            ],
             
-            ("What is mathematics?", "Mathematics is the language of science. Numbers and symbols express ideas."),
-            ("What is algebra?", "Algebra uses letters to represent unknown values. Equations show relationships."),
-            ("What is statistics?", "Statistics analyzes data and finds patterns. Probability measures uncertainty."),
+            # Math knowledge
+            "math": [
+                "Mathematics is the study of numbers, structures, and patterns. It's the foundation of science and engineering.",
+                "Algebra uses symbols and letters to represent unknown values. Equations express relationships between quantities.",
+                "Calculus studies continuous change. Differential calculus finds rates of change, integral calculus finds areas and volumes.",
+                "Statistics collects, analyzes, and interprets data. It helps make decisions under uncertainty.",
+                "Probability measures the likelihood of events. It ranges from 0 (impossible) to 1 (certain).",
+                "Geometry studies shapes, sizes, and properties of space. Euclidean geometry deals with flat spaces.",
+                "Linear algebra studies vectors and matrices. It's fundamental to computer graphics and machine learning.",
+                "Number theory studies properties of integers. It includes prime numbers, divisibility, and congruences.",
+            ],
             
-            ("What is ANDROM?", "ANDROM stands for Adaptive Network of Deterministic Rule-based Operations and Mathematics."),
-            ("How do you work?", "I use thousands of computational units to process information. My rule engine helps me make decisions."),
-            ("How do you improve?", "I can improve myself by learning from experience. Each interaction teaches me something."),
-            ("What can you do?", "I can solve problems, generate code, and have conversations. I use genetic algorithms to evolve better solutions."),
+            # Philosophy
+            "philosophy": [
+                "Philosophy explores fundamental questions about existence, knowledge, values, reason, and language.",
+                "Ethics studies right and wrong, good and bad. It asks how we should live and treat others.",
+                "Epistemology studies knowledge. It asks what knowledge is, how we acquire it, and what we can know.",
+                "Consciousness is the awareness of ourselves and our surroundings. Its nature is one of philosophy's deepest questions.",
+                "Free will is the ability to choose our actions. Philosophers debate whether it exists or if all events are determined.",
+                "Logic studies valid reasoning. It provides tools for constructing and evaluating arguments.",
+                "Existentialism emphasizes individual existence, freedom, and choice. It asks how we create meaning in an indifferent universe.",
+            ],
             
-            ("What is philosophy?", "Philosophy explores fundamental questions about existence. Ethics studies right and wrong."),
-            ("What is consciousness?", "Consciousness is a deep philosophical question. How do we know what is real?"),
+            # Technology
+            "technology": [
+                "Technology applies scientific knowledge for practical purposes. It shapes how we live, work, and communicate.",
+                "Computers process information using electronic circuits. They execute programs that perform calculations and operations.",
+                "The internet connects billions of computers worldwide. It enables instant communication, information sharing, and collaboration.",
+                "Software consists of programs and data that tell hardware what to do. Good software is reliable, efficient, and user-friendly.",
+                "Artificial intelligence is transforming technology. It powers recommendation systems, autonomous vehicles, and medical diagnosis.",
+                "Cybersecurity protects systems and data from attacks. It includes encryption, authentication, and intrusion detection.",
+                "Cloud computing provides on-demand access to computing resources. It enables scalable, flexible, and cost-effective solutions.",
+            ],
             
-            ("What is technology?", "Computers process information using circuits and software. Technology changes how we live and work."),
-            ("How does the internet work?", "The internet connects computers globally. It enables communication and information sharing."),
+            # ANDROM specific
+            "androm": [
+                "I am ANDROM, an Adaptive Network of Deterministic Rule-based Operations and Mathematics.",
+                "I use thousands of computational units to process information in parallel.",
+                "My rule engine applies logical rules to make decisions and solve problems.",
+                "I can learn from conversations and improve my responses over time.",
+                "I use genetic algorithms to evolve better solutions to problems.",
+                "My memory system stores knowledge and retrieves relevant information for each question.",
+                "I analyze code, generate solutions, and optimize my own performance.",
+                "I combine deterministic rules with probabilistic reasoning for smart decisions.",
+            ],
             
-            ("Goodbye!", "Goodbye! Have a great day!"),
-            ("Bye", "See you later! Take care!"),
-        ]
+            # Learning and self-improvement
+            "learning": [
+                "Learning is acquiring new knowledge, skills, or behaviors through study, experience, or teaching.",
+                "Practice and repetition strengthen neural pathways, making skills more automatic over time.",
+                "Feedback helps us learn by showing what works and what doesn't. Constructive feedback accelerates improvement.",
+                "Curiosity drives learning. Asking questions and exploring leads to deeper understanding.",
+                "Growth mindset believes abilities can be developed through effort. It encourages persistence and learning from failure.",
+                "Deliberate practice focuses on specific aspects of performance with immediate feedback.",
+                "Metacognition is thinking about thinking. It helps us understand and improve our learning processes.",
+            ],
+            
+            # Science
+            "science": [
+                "Science is the systematic study of the natural world through observation and experiment.",
+                "The scientific method involves forming hypotheses, testing them, and drawing conclusions from evidence.",
+                "Physics studies matter, energy, and their interactions. It explains everything from atoms to galaxies.",
+                "Biology studies living organisms. It includes genetics, evolution, ecology, and physiology.",
+                "Chemistry studies substances and their transformations. It explains how matter changes and bonds form.",
+            ],
+        }
         
-        # Store responses in memory
-        for question, answer in qa_pairs:
-            self.model.memory_bank.store(question, memory_type="question")
-            self.model.memory_bank.store(answer, memory_type="response")
+        # Store all knowledge
+        for topic, texts in knowledge.items():
+            for text in texts:
+                self.model.memory_bank.store(text, memory_type="response", topic=topic)
     
     def respond(self, user_input: str) -> str:
         """
-        Generate a response to user input.
-        
-        Uses MemNet to:
-        1. Encode the input
-        2. Retrieve relevant memories
-        3. Generate coherent response
+        Generate a smart, relevant response.
         """
         self.conversation_history.append({"role": "user", "text": user_input})
         
-        # Generate response using MemNet
-        response = self.model.generate(user_input, max_length=50, temperature=0.7)
+        # Generate response
+        response = self.model.generate(user_input)
         
-        # Clean up response
+        # Clean up
         response = self._clean_response(response)
         
-        # Store in memory for learning
+        # Learn from this exchange
         self.model.memory_bank.store(user_input, memory_type="question")
         self.model.memory_bank.store(response, memory_type="response")
         
@@ -99,7 +158,7 @@ class Talker:
     def _clean_response(self, text: str) -> str:
         """Clean up generated response."""
         if not text:
-            return "I am thinking about that."
+            return "I'm thinking about that. Could you tell me more?"
         
         text = text.strip()
         
@@ -120,14 +179,14 @@ class Talker:
         """Alias for respond."""
         return self.respond(user_input)
     
-    def learn(self, text: str):
-        """Learn from text."""
-        self.model.memory_bank.store(text, memory_type="response")
+    def learn(self, text: str, topic: str | None = None):
+        """Learn new information."""
+        self.model.memory_bank.store(text, memory_type="response", topic=topic)
     
-    def learn_many(self, texts: list[str]):
-        """Learn from multiple texts."""
+    def learn_many(self, texts: list[str], topic: str | None = None):
+        """Learn multiple pieces of information."""
         for text in texts:
-            self.learn(text)
+            self.learn(text, topic)
     
     def reset(self):
         """Reset conversation history."""
