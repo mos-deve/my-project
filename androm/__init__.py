@@ -13,10 +13,13 @@ from androm.model import Model
 from androm.learner import Learner
 from androm.evolver import Evolver, CodeOrganism
 from androm.scenarios import Scenario, ScenarioLibrary
+from androm.talker import Talker
+from androm.recursive import Recursive, Improvement
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __all__ = [
     "Unit", "UnitType", "Network", "RuleEngine", "CodeGenerator", 
     "SelfOptimizer", "Brain", "Model", "Learner", "Evolver", 
-    "CodeOrganism", "Scenario", "ScenarioLibrary"
+    "CodeOrganism", "Scenario", "ScenarioLibrary", "Talker",
+    "Recursive", "Improvement"
 ]
